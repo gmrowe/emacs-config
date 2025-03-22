@@ -45,7 +45,20 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
     (add-hook hook
 	      (lambda () (setq show-trailing-whitespace nil)))))
 
-; Default options to use when emacs loads
+(defun custom--duplicate-line-above ()
+  "Duplicate the current line above the current position and keep cursor at current position."
+  (interactive)
+  (let ((column (current-column)))
+    (save-excursion
+      (beginning-of-line)
+      (let ((line (buffer-substring (point) (line-end-position))))
+        (forward-line 0)
+        (open-line 1)
+        (insert line)))
+    (move-to-column column)))
+
+
+;;; Default options to use when emacs loads
 (use-package emacs
   :bind
   (;; Bind C-z to undo, by default it is bound to `suspend-frame'
@@ -53,7 +66,8 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
    ;; Comment selected line(s) by using C-;
    ;; TODO: This is only really needed in prog-modes,
    ;;       can we define it there
-   ("C-;" . comment-line))
+   ("C-;" . comment-line)
+   ("C-c d" . custom--duplicate-line-above))
 
   :hook
   ;; Display line numbers in any program mode
@@ -68,7 +82,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 
   :config
   ;; C-<arrow key> will navagate between windows (frames)
-  ; (windmove-default-keybindings 'control)
+					; (windmove-default-keybindings 'control)
   ;; When in a gui frame, mouse right-click will bring up context menu
   (when (display-graphic-p) (context-menu-mode))
   ;; Save minibuffer history between sessions
@@ -128,9 +142,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :hook
   (c-mode . (lambda () (setq-local c-basic-offset 4))))
 
-
-
-
 ;; which-key: shows a popup of available keybindings when typing a long key
 ;; sequence
 (use-package which-key
@@ -162,19 +173,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :ensure t
   :hook
   (org-mode . org-superstar-mode))
-
-
-;; ;; simplicity-theme is a minimalist theme that only
-;; ;; colors a small number of elements (strings, comments, errors, etc.)
-;; ;; see: https://github.com/smallwat3r/emacs-simplicity-theme
-;; (use-package simplicity-theme
-;;   :ensure t
-;;   :config
-;;   (setq simplicity-override-colors-alist
-;; 	'(("simplicity-background" . "#2d3743")
-;; 	  ("simplicity-comment" . "#d3e0bc")
-;; 	  ("simplicity-string" . "gold")))
-;;   (load-theme 'simplicity))
 
 ;; simplicity-theme is a minimalist theme that only
 ;; colors a small number of elements (strings, comments, errors, etc.)
@@ -216,24 +214,33 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :hook
   (after-init . global-company-mode))
 
+
+;; Disabling the flycheck mode stuff for now. I may
+;; look into only enabling for dynamic languages. (python-mode, clojure-mode)
 ;; flycheck-rust: a flycheck extension for configuring flycheck
 ;; automatically for the current cargo project
-(use-package flycheck-rust
-  :ensure t)
+;; (use-package flycheck-rust
+;;   :ensure t)
 
 ;; flycheck-mode: syntax checking for emacs
 ;; flycheck mode
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
 
 ;; projectile: project-aware focused functions (compile, test, search etc.)
 (use-package projectile
   :ensure t
   :init   (projectile-mode 1)
+  :config
+  (setq projectile-project-search-path '("~/dev"))
   :bind-keymap
   ("s-p" . projectile-command-map)
-  ("C-c p" . projectile-command-map))
+  ("C-c p" . projectile-command-map)
+  :bind
+  (("C-c c" . projectile-compile-project)))
+
+;; (setq projectile-project-search-path '("~/path/to/your/projects/"))
 
 ;;; Rust setup
 ;; rust-mode
@@ -317,6 +324,11 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :bind (:map markdown-mode-map
          ("C-c C-e" . markdown-do)))
 
+
+;; (setq lsp-enable-snippet nil)  ;; Disable snippets if not needed
+;; (setq lsp-enable-imenu nil)  ;; Disable imenu integration if not needed
+
+
 ;; lsp-mode - only active for c-mode right now
 (use-package lsp-mode
   :ensure t
@@ -324,9 +336,15 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :config
-  (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (setq lsp-file-watch-threshold 15000))
+  :custom
+  (lsp-keymap-prefix "C-c l")
+  (lsp-diagnostics-provider
+   :none
+   "(was :auto) Disable distracting lsp diagnostics.")
+  (lsp-headerline-breadcrumb-enable-diagnostics
+   nil
+   "(was t) Disable red squigglies under headerline path"))
 
 ;; Uses clang format to format the code
 (use-package clang-format-lite
