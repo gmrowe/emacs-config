@@ -57,6 +57,16 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
         (insert line)))
     (move-to-column column)))
 
+(defvar custom--saved-text-scale 0
+  "The font size to restore after reverting the buffer.")
+
+(defun custom--store-text-scale ()
+  "Store the current font size before reverting the buffer."
+  (setq custom--saved-text-scale text-scale-mode-amount))
+
+(defun custom--revert-text-scale ()
+  "Restore the text scale if it is "
+  (text-scale-set custom--saved-text-scale))
 
 ;;; Default options to use when emacs loads
 (use-package emacs
@@ -67,6 +77,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
    ;; TODO: This is only really needed in prog-modes,
    ;;       can we define it there
    ("C-;" . comment-line)
+   ("C-c ;" . comment-line)
    ("C-c d" . custom--duplicate-line-above))
 
   :hook
@@ -79,7 +90,9 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (prog-mode . electric-pair-mode)
   ;; When in a text mode, use visual line mode to wrap lines
   (text-mode . visual-line-mode)
-
+  (before-revert . custom--store-text-scale)
+  (after-revert . custom--revert-text-scale)
+ 
   :config
   ;; C-<arrow key> will navagate between windows (frames)
 					; (windmove-default-keybindings 'control)
