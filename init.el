@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;;;; packagef --- Summary
 
 ;;; Commentary:
@@ -202,6 +203,11 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 	  ("simplicity-type"       . "#b8bb26")))
   (load-theme 'simplicity))
 
+(use-package whitespace-hl-mode
+  :load-path "manual-install/whitespace-hl-mode"
+  :hook
+  (prog-mode . my-whitespace-hl-mode))
+
 ;; ivy: completion mode for multiple modes. Trust me, we really
 ;; want this!
 (use-package ivy
@@ -314,10 +320,10 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 
 ;; zprint is a source code formatter for Clojure.
 ;; zprint-mode formats a buffer when it is saved.
-(use-package zprint-mode
-  :ensure t
-  :hook
-  (clojure-mode . zprint-mode))
+;; (use-package zprint-mode
+;;   :ensure t
+;;   :hook
+;;   (clojure-mode . zprint-mode))
 
 (use-package gforth
   :load-path "manual-install"
