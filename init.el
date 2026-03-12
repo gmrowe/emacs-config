@@ -204,7 +204,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (load-theme 'simplicity))
 
 (use-package whitespace-hl-mode
-  :load-path "manual-install/whitespace-hl-mode"
+  :load-path "manual-install"
   :hook
   (prog-mode . my-whitespace-hl-mode))
 
