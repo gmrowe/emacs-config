@@ -191,20 +191,35 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 ;; simplicity-theme is a minimalist theme that only
 ;; colors a small number of elements (strings, comments, errors, etc.)
 ;; see: https://github.com/smallwat3r/emacs-simplicity-theme
+
+;; ("simplicity-keyword"       . "#ffffff")
+;; ("simplicity-type"          . "#ffffff")
 (use-package simplicity-theme
-  :load-path "manual-install/simplicity-theme"
+  :ensure t
   :config
   (setq simplicity-override-colors-alist
-	'(("simplicity-foreground" . "#ebdbb2")
-	  ("simplicity-background" . "#282828")
-	  ("simplicity-comment"    . "#d3869b")
-	  ("simplicity-string"     . "#fabd2f")
-	  ("simplicity-keyword"    . "#fe8019")
-	  ("simplicity-type"       . "#b8bb26")))
-  (load-theme 'simplicity))
+			'(("simplicity-foreground" . "#ebdbb2")
+	    ("simplicity-background" . "#282828")
+	    ("simplicity-comment"    . "#d3869b")
+	    ("simplicity-string"     . "#fabd2f")))
+  (load-theme 'simplicity)
+  (custom-set-faces
+   '(font-lock-keyword-face ((t (:foreground "#fe8019"))))
+   '(font-lock-type-face    ((t (:foreground "#b8bb26"))))))
+;; (use-package simplicity-theme
+;;   :load-path "lisp/simplicity-theme"
+;;   :config
+;;   (setq simplicity-override-colors-alist
+;; 			'(("simplicity-foreground" . "#ebdbb2")
+;; 	    ("simplicity-background" . "#282828")
+;; 	    ("simplicity-comment"    . "#d3869b")
+;; 	    ("simplicity-string"     . "#fabd2f")
+;; 	    ("simplicity-keyword"    . "")
+;; 	    ("simplicity-type"       . "#b8bb26")))
+;;   (load-theme 'simplicity))
 
 (use-package whitespace-hl-mode
-  :load-path "manual-install"
+  :load-path "lisp/whitespace-hl-mode"
   :hook
   (prog-mode . my-whitespace-hl-mode))
 
@@ -326,7 +341,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 ;;   (clojure-mode . zprint-mode))
 
 (use-package gforth
-  :load-path "manual-install"
+  :load-path "lisp/gforth"
   :autoload forth-mode
   :mode ("\\.fs\\'" . forth-mode)
   :bind
