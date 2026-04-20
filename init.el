@@ -285,7 +285,8 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (setq rustic-lsp-client 'eglot)
   :bind
   (:map rustic-mode-map
-        ("C-c h" . eglot-inlay-hints-mode))
+        ("C-c h" . eglot-inlay-hints-mode)
+        ("C-c C-d C-d" . eldoc-doc-buffer))
   :hook
   (rustic-mode . (lambda ()
                    ;; Do not use timers as a trigger to flag errors
