@@ -235,7 +235,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :hook
   (after-init . global-company-mode))
 
-
 ;; Disabling the flycheck mode stuff for now. I may
 ;; look into only enabling for dynamic languages. (python-mode, clojure-mode)
 ;; flycheck-rust: a flycheck extension for configuring flycheck
@@ -277,6 +276,17 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :bind
   (:map rustic-mode-map
         ("C-c h" . eglot-inlay-hints-mode))
+  :hook
+  (rustic-mode . (lambda ()
+                   ;; Do not use timers as a trigger to flag errors
+                   (setq-local flymake-no-changes-timeout nil)
+                   ;; Flag errors on save though
+                   (setq-local flymake-start-on-save-buffer t)
+                   ;; Give rust-analyzer time to process changes before flymake
+                   ;; ckecks. This prevents annoyances like flymake failing
+                   ;; to flag an error because it is getting stale info from
+                   ;; the LSP
+                   (setq-local eglot-send-changes-idle-time 0.5)))
   :custom
   (indent-tabs-mode nil))
 
