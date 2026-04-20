@@ -273,11 +273,9 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :ensure t
   :config
   (setq rustic-format-on-save t)
-  (push 'rustic-clippy flycheck-checkers)
-  (remove-hook 'rustic-mode-hook 'flycheck-mode)
-  (indent-tabs-mode nil)
+  (setq rustic-lsp-client 'eglot)
   :custom
-  (rustic-lsp-setup-p nil "Do not setup lsp mode... for now"))
+  (indent-tabs-mode nil))
 
 ;;; Clojure setup
 
