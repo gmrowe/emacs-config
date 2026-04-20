@@ -229,11 +229,21 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 
 ;; ~~~~~~~~~~~~~ Development specific packages
 
-;; company-mode: text completion for emacs
-(use-package company
+;; ;; company-mode: text completion for emacs
+;; (use-package company
+;;   :ensure t
+;;   :hook
+;;   (after-init . global-company-mode))
+
+(use-package corfu
   :ensure t
-  :hook
-  (after-init . global-company-mode))
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.3)
+  (corfu-auto-prefix 2)
+  (corfu-quit-no-match t)
+  :config
+  (global-corfu-mode))
 
 ;; Disabling the flycheck mode stuff for now. I may
 ;; look into only enabling for dynamic languages. (python-mode, clojure-mode)
