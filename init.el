@@ -275,6 +275,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (setq rustic-format-on-save t)
   (push 'rustic-clippy flycheck-checkers)
   (remove-hook 'rustic-mode-hook 'flycheck-mode)
+  (indent-tabs-mode nil)
   :custom
   (rustic-lsp-setup-p nil "Do not setup lsp mode... for now"))
 
