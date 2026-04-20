@@ -274,6 +274,9 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :config
   (setq rustic-format-on-save t)
   (setq rustic-lsp-client 'eglot)
+  :bind
+  (:map rustic-mode-map
+        ("C-c h" . eglot-inlay-hints-mode))
   :custom
   (indent-tabs-mode nil))
 
