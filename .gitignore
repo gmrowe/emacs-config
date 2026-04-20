@@ -11,3 +11,4 @@ tramp
 transient/
 url/
 eln-cache/
+.DS_Store
