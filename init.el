@@ -44,7 +44,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (dolist
       (hook hooks)
     (add-hook hook
-	      (lambda () (setq show-trailing-whitespace nil)))))
+       (lambda () (setq show-trailing-whitespace nil)))))
 
 (defun custom--duplicate-line-above ()
   "Duplicate the current line above the current position and keep cursor at current position."
@@ -82,8 +82,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (text-mode . visual-line-mode)
 
   :config
-  ;; C-<arrow key> will navagate between windows (frames)
-					; (windmove-default-keybindings 'control)
   ;; When in a gui frame, mouse right-click will bring up context menu
   (when (display-graphic-p) (context-menu-mode))
   ;; Save minibuffer history between sessions
@@ -123,8 +121,8 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   (ring-bell-function 'ignore "Never make a sound")
   (backup-directory-alist
    `(("." . ,(expand-file-name
-	      (file-name-as-directory "backups")
-	      user-emacs-directory)))
+       (file-name-as-directory "backups")
+       user-emacs-directory)))
    "Don't clutter up random folders with backups")
   (backup-by-copying t "Always use copying to create backup files")
   (mac-command-modifier 'meta "Map command key to meta on macos")
@@ -136,10 +134,10 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :ensure nil
   :init
   (setq c-default-style '((java-mode . "java")
-			  (awk-mode . "awk")
-			  (c-mode . "bsd")
-			  (c++-mode . "bsd")
-			  (other . "gnu")))
+     (awk-mode . "awk")
+     (c-mode . "bsd")
+     (c++-mode . "bsd")
+     (other . "gnu")))
   :hook
   (c-mode . (lambda () (setq-local c-basic-offset 4))))
 
@@ -178,32 +176,18 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 ;; simplicity-theme is a minimalist theme that only
 ;; colors a small number of elements (strings, comments, errors, etc.)
 ;; see: https://github.com/smallwat3r/emacs-simplicity-theme
-
-;; ("simplicity-keyword"       . "#ffffff")
-;; ("simplicity-type"          . "#ffffff")
 (use-package simplicity-theme
   :ensure t
   :config
   (setq simplicity-override-colors-alist
-			'(("simplicity-foreground" . "#ebdbb2")
-	    ("simplicity-background" . "#282828")
-	    ("simplicity-comment"    . "#d3869b")
-	    ("simplicity-string"     . "#fabd2f")))
+   '(("simplicity-foreground" . "#ebdbb2")
+     ("simplicity-background" . "#282828")
+     ("simplicity-comment"    . "#d3869b")
+     ("simplicity-string"     . "#fabd2f")))
   (load-theme 'simplicity)
   (custom-set-faces
    '(font-lock-keyword-face ((t (:foreground "#fe8019"))))
    '(font-lock-type-face    ((t (:foreground "#b8bb26"))))))
-;; (use-package simplicity-theme
-;;   :load-path "lisp/simplicity-theme"
-;;   :config
-;;   (setq simplicity-override-colors-alist
-;; 			'(("simplicity-foreground" . "#ebdbb2")
-;; 	    ("simplicity-background" . "#282828")
-;; 	    ("simplicity-comment"    . "#d3869b")
-;; 	    ("simplicity-string"     . "#fabd2f")
-;; 	    ("simplicity-keyword"    . "")
-;; 	    ("simplicity-type"       . "#b8bb26")))
-;;   (load-theme 'simplicity))
 
 (use-package whitespace-hl-mode
   :load-path "lisp/whitespace-hl-mode"
@@ -226,15 +210,7 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   ("M-o" . ace-window)
   ("C-x o" . ace-window))
 
-
 ;; ~~~~~~~~~~~~~ Development specific packages
-
-;; ;; company-mode: text completion for emacs
-;; (use-package company
-;;   :ensure t
-;;   :hook
-;;   (after-init . global-company-mode))
-
 (use-package corfu
   :ensure t
   :custom
@@ -249,14 +225,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 ;; look into only enabling for dynamic languages. (python-mode, clojure-mode)
 ;; flycheck-rust: a flycheck extension for configuring flycheck
 ;; automatically for the current cargo project
-;; (use-package flycheck-rust
-;;   :ensure t)
-
-;; flycheck-mode: syntax checking for emacs
-;; flycheck mode
-;; (use-package flycheck
-;;   :ensure t
-;;   :init (global-flycheck-mode))
 
 ;; projectile: project-aware focused functions (compile, test, search etc.)
 (use-package projectile
@@ -269,8 +237,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   ("C-c p" . projectile-command-map)
   :bind
   (("C-c c" . projectile-compile-project)))
-
-;; (setq projectile-project-search-path '("~/path/to/your/projects/"))
 
 ;;; Rust setup
 ;; rust-mode
@@ -343,12 +309,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 (use-package cider
   :ensure t)
 
-;; zprint is a source code formatter for Clojure.
-;; zprint-mode formats a buffer when it is saved.
-;; (use-package zprint-mode
-;;   :ensure t
-;;   :hook
-;;   (clojure-mode . zprint-mode))
 
 (use-package gforth
   :load-path "lisp/gforth"
@@ -367,11 +327,6 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
          ("C-c C-e" . markdown-do)))
-
-
-;; (setq lsp-enable-snippet nil)  ;; Disable snippets if not needed
-;; (setq lsp-enable-imenu nil)  ;; Disable imenu integration if not needed
-
 
 ;; lsp-mode - only active for c-mode right now
 (use-package lsp-mode
