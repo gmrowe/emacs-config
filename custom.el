@@ -10,11 +10,7 @@
      "9655ef5a1221c33b53d9cbdd1a04090ca8a458015a1dd365344e1bb3c3cfcf81"
      "1d51919e9a075a4f56396681dc99adecefa152ab29819178403cbf6ae5bc0dd8"
      default))
- '(package-selected-packages
-   '(ace-window cider clang-format-lite company corfu flycheck-clj-kondo
-                flycheck-rust ivy lsp-mode move-text neotree
-                org-superstar paredit parinfer-rust-mode projectile
-                rustic simplicity-theme smex which-key zprint-mode))
+ '(package-selected-packages nil)
  '(safe-local-variable-directories
    '("/Users/garrettrowe/dev/graph/" "/Users/garrettrowe/dev/anim8/"))
  '(safe-local-variable-values

@@ -130,16 +130,10 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 
 (expand-file-name (file-name-as-directory "backups") user-emacs-directory)
 
-(use-package cc-mode
-  :ensure nil
-  :init
-  (setq c-default-style '((java-mode . "java")
-     (awk-mode . "awk")
-     (c-mode . "bsd")
-     (c++-mode . "bsd")
-     (other . "gnu")))
+(use-package flyspell
+  :ensure nil  ;; built-in, like your cc-mode declaration
   :hook
-  (c-mode . (lambda () (setq-local c-basic-offset 4))))
+  (text-mode . flyspell-mode))
 
 ;; which-key: shows a popup of available keybindings when typing a long key
 ;; sequence
@@ -210,6 +204,17 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   ("M-o" . ace-window)
   ("C-x o" . ace-window))
 
+;; avy: jump to any visible character on screen with `M-j'
+;; Type target characters, then select from the overlaid letter hints
+;; to jump directly to that position. Works across all visible windows.
+(use-package avy
+  :ensure t
+  :bind
+  (("M-j" . avy-goto-char-2)
+   ("M-J" . avy-goto-line))
+  :config
+  (setq avy-all-windows t))
+
 ;; ~~~~~~~~~~~~~ Development specific packages
 (use-package corfu
   :ensure t
@@ -221,10 +226,12 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
   :config
   (global-corfu-mode))
 
-;; Disabling the flycheck mode stuff for now. I may
-;; look into only enabling for dynamic languages. (python-mode, clojure-mode)
-;; flycheck-rust: a flycheck extension for configuring flycheck
-;; automatically for the current cargo project
+;; Minor mode that allows flycheck and emacs to work together
+(use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode 1))
 
 ;; projectile: project-aware focused functions (compile, test, search etc.)
 (use-package projectile
@@ -242,6 +249,18 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
 ;; rust-mode
 (use-package rust-mode
   :ensure t)
+
+;; Mode for c-programming
+(use-package cc-mode
+  :ensure nil
+  :init
+  (setq c-default-style '((java-mode . "java")
+                          (awk-mode . "awk")
+                          (c-mode . "bsd")
+                          (c++-mode . "bsd")
+                          (other . "gnu")))
+  :hook
+  (c-mode . (lambda () (setq-local c-basic-offset 4))))
 
 ;; rustic-mode - some additional goodies on top of rust-mode
 (use-package rustic
@@ -263,7 +282,8 @@ HOOKS should be an alist of mode hooks in which whitespace should be ignored"
                    ;; ckecks. This prevents annoyances like flymake failing
                    ;; to flag an error because it is getting stale info from
                    ;; the LSP
-                   (setq-local eglot-send-changes-idle-time 0.5)))
+                   (setq-local eglot-send-changes-idle-time 0.2)))
+  (rustic-mode . flycheck-eglot-disable-diagnostics-pull)
   :custom
   (indent-tabs-mode nil))
 
